@@ -148,8 +148,6 @@ class LinkedList {
 			System.out.println("Invalid position");
 		}
 	}
-	
-	
 
 	public boolean checkPalindromeUsingRecursion(Node head) {
 		Node current = head;
@@ -177,37 +175,58 @@ class LinkedList {
 
 		}
 	}
-	
-	public void searchUsingRecursion(Node current, int value){
-		if(current != null){
+
+	public void searchUsingRecursion(Node current, int value) {
+		if (current != null) {
 			counter++;
 		}
-		if(current.next == null){
-			
-			if(current.data == value){
-				System.out.println("Element found at "+counter);
+		if (current.next == null) {
+
+			if (current.data == value) {
+				System.out.println("Element found at " + counter);
 				found = true;
-				
-			} 
+
+			}
 			counter--;
 		} else {
 			searchUsingRecursion(current.next, value);
-			if(current.data == value){
-				System.out.println("Element found at "+counter);
+			if (current.data == value) {
+				System.out.println("Element found at " + counter);
 				found = true;
 			}
 			counter--;
 		}
-		if(found == false && current == this.head){
+		if (found == false && current == this.head) {
 			System.out.println("No such Element found in the list");
 		}
-		
+
 	}
-	
+
+	public void bubbleSort() {
+		Node temp = head;
+		int sizeOfLinkedList = 0;
+		if (head != null) {
+			while (temp != null) {
+				temp = temp.next;
+				sizeOfLinkedList++;
+			}
+		}
+
+		Node temp1 = head;
+		Node temp2 = head;
+		int store = 0;
+		while (temp2 != null && temp2.next != null) {
+			temp2 = temp1.next;
+			if (temp1.data > temp2.data) {
+				store = temp2.data;
+				temp2.data = temp1.data;
+				temp1.data = store;
+			}
+			temp1 = temp1.next;
+		}
+	}
+
 }
-
-
-
 
 public class CyclicLinkedListDemo {
 
@@ -235,6 +254,7 @@ public class CyclicLinkedListDemo {
 		System.out.println("Press 7: Press 7 to check the list is palindrome or not using Recursion");
 		System.out.println("Press 8: Press 8 to remove Element");
 		System.out.println("Press 9: Press 9 to search Element using Recursion");
+		System.out.println("Press 10: Press 10 for Bubble Sort");
 		while (true) {
 			String str = scanner.next();
 			int position;
@@ -291,7 +311,7 @@ public class CyclicLinkedListDemo {
 					list.removeElementAtposition(positionToBeRemoved);
 
 					break;
-					
+
 				case 9:
 					System.out.println("Enter the Element to search");
 					elementToBeSearched = scanner.nextInt();
@@ -299,6 +319,13 @@ public class CyclicLinkedListDemo {
 
 					break;
 
+					
+				case 10:
+					list.bubbleSort();
+					list.printList();
+					
+
+					break;
 				}
 
 			}
