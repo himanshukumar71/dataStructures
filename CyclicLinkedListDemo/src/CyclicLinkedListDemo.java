@@ -295,46 +295,46 @@ class LinkedList {
 		}
 	}
 
-	public void insertionSort(){
-    	 Node current = head;
-    	 Node nextNode = head;
-    	 while(current.next != null){
-    		 nextNode = current.next;
-    		 if(nextNode.data < current.data){
-    			insertInSorted(nextNode, current);
-    		 } else {
-    			 current = current.next;
-    		 }
-    	 }
-    	 printList();
-     }
-	
-	public void insertInSorted(Node nodeToBeInserted, Node current){
+	public void insertionSort() {
+		Node current = head;
+		Node nextNode = head;
+		while (current.next != null) {
+			nextNode = current.next;
+			if (nextNode.data < current.data) {
+				insertInSorted(nextNode, current);
+			} else {
+				current = current.next;
+			}
+		}
+		printList();
+	}
+
+	public void insertInSorted(Node nodeToBeInserted, Node current) {
 		Node prev = null;
-		while(prev !=current){
-	         if(prev == null){
-	        	 prev = head;
-	         }
-			if(nodeToBeInserted.data <= head.data){
+		while (prev != current) {
+			if (prev == null) {
+				prev = head;
+			}
+			if (nodeToBeInserted.data <= head.data) {
 				// insert at head or in place of prev
-				
+
 				current.next = nodeToBeInserted.next;
 				nodeToBeInserted.next = head;
 				head = nodeToBeInserted;
 				prev = head;
 				break;
-			} else if(nodeToBeInserted.data > prev.data && nodeToBeInserted.data <= prev.next.data){
+			} else if (nodeToBeInserted.data > prev.data && nodeToBeInserted.data <= prev.next.data) {
 				// insert just after prev and before prev.next
 				current.next = nodeToBeInserted.next;
 				nodeToBeInserted.next = prev.next;
 				prev.next = nodeToBeInserted;
 				break;
-			} else if(nodeToBeInserted.data > prev.data && nodeToBeInserted.data > prev.next.data){
-				//increase prev
+			} else if (nodeToBeInserted.data > prev.data && nodeToBeInserted.data > prev.next.data) {
+				// increase prev
 				prev = prev.next;
 			}
 		}
-		
+
 	}
 
 	public void pairWiseSwap() {
@@ -357,6 +357,84 @@ class LinkedList {
 		}
 		printList();
 	}
+
+	public void storeListInArrayIteration() {
+		Node temp = head;
+		int size = 0;
+		int i = 0;
+		// calculate size
+		while (temp != null) {
+			size++;
+			temp = temp.next;
+		}
+		int arr[] = new int[size];
+		temp = head;
+		while (temp != null) {
+			arr[i] = temp.data;
+			i++;
+			temp = temp.next;
+		}
+		for (int j = 0; j < size; j++) {
+			System.out.print("{" + arr[j] + "}");
+		}
+		System.out.println("");
+		System.out.println("Array Length: " + arr.length);
+	}
+
+	public int storeListInArrayUsingRecursion() {
+		Node temp = head;
+		int i = 0;
+		int size = sizeUsingRecursion(head);
+		int arr[] = new int[size];
+		while (temp != null) {
+			arr[i] = temp.data;
+			i++;
+			temp = temp.next;
+		}
+		for (int j = 0; j < size; j++) {
+			System.out.print("{" + arr[j] + "}");
+		}
+		return 0;
+	}
+
+	public int sizeUsingRecursion(Node current) {
+		if (current == null) {
+			return 0;
+		} else {
+			return 1 + sizeUsingRecursion(current.next);
+		}
+	}
+	
+	public void printMiddleElementList(){
+		Node slowPtr = head;
+		Node fastPtr = head;
+		while(fastPtr != null && fastPtr.next != null && fastPtr.next.next != null){
+			fastPtr = fastPtr.next.next;
+			slowPtr = slowPtr.next;
+		}
+		System.out.println("Middle Element " +slowPtr.data);
+	}
+	
+	public void nthNodeFromLast(int n){
+		Node firstPtr = head;
+		Node secondPtr = head;
+		int count = 1;
+		if(head != null){
+			while(count != n){
+				secondPtr = secondPtr.next;
+				count++;
+			}
+		} else {
+			System.out.println("No Element in the list");
+		}
+		while(secondPtr.next != null){
+			firstPtr = firstPtr.next;
+			secondPtr = secondPtr.next;
+		}
+		System.out.println(n+"th Element in the list from last is "+firstPtr.data);
+	}
+	
+	
 
 }
 
@@ -393,6 +471,10 @@ public class CyclicLinkedListDemo {
 		System.out.println("Press 14: Press 14 for Digit formation using recursion");
 		System.out.println("Press 15: Press 15 to insert in SortedList");
 		System.out.println("Press 16: Press 16 to do Swap Pairwise");
+		System.out.println("Press 17: Press 17 to store data in array");
+		System.out.println("Press 18: Press 18 to store data in array using recursion");
+		System.out.println("Press 19: Press 19 to print middle element");
+		System.out.println("Press 20: Press 20 to print random nth element from last");
 		while (true) {
 			String str = scanner.next();
 			int position;
@@ -470,7 +552,7 @@ public class CyclicLinkedListDemo {
 					break;
 
 				case 12:
-				   list.insertionSort();
+					list.insertionSort();
 
 					break;
 
@@ -496,6 +578,21 @@ public class CyclicLinkedListDemo {
 					break;
 
 				case 17:
+					list.storeListInArrayIteration();
+					break;
+
+				case 18:
+					list.storeListInArrayUsingRecursion();
+					break;
+					
+				case 19:
+					list.printMiddleElementList();
+					break;
+					
+				case 20:
+					ran = new Random();
+					number = ran.nextInt(5);
+					list.nthNodeFromLast(number);
 					break;
 				}
 
