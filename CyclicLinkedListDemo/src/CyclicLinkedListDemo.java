@@ -1,3 +1,4 @@
+import java.util.Random;
 import java.util.Scanner;
 import java.util.Stack;
 
@@ -11,6 +12,7 @@ class LinkedList {
 	Node nonRecursivePointer;
 	public static int counter;
 	public static boolean found;
+	public static int number;
 
 	public void insertAtLast(int value) {
 		Node toBeAttached = new Node();
@@ -202,28 +204,158 @@ class LinkedList {
 
 	}
 
-	public void bubbleSort() {
+	public void digitForm() {
 		Node temp = head;
-		int sizeOfLinkedList = 0;
-		if (head != null) {
-			while (temp != null) {
+		int number = 0;
+		while (temp != null) {
+			number = number * 10 + temp.data;
+			temp = temp.next;
+		}
+		System.out.println("The number is " + number);
+	}
+
+	public void digitFormUsingRecursion(Node current) {
+		if (current.next == null) {
+			number = (current.data) + number * 10;
+			System.out.println(number);
+		} else {
+			number = (current.data) + number * 10;
+			digitFormUsingRecursion(current.next);
+		}
+	}
+
+	public void insertInSortedList(int value, LinkedList list) {
+		list.bubbleSort();
+		Node prev = head;
+		Node temp = head;
+		Node toBeAttached = new Node();
+		toBeAttached.data = value;
+		while (temp != null) {
+			if (temp.data < value) {
+				prev = temp;
 				temp = temp.next;
-				sizeOfLinkedList++;
+			} else {
+				toBeAttached.next = temp;
+				prev.next = toBeAttached;
+				break;
 			}
 		}
+		if (temp == null) {
+			toBeAttached.next = temp;
+			prev.next = toBeAttached;
+		}
+		list.printList();
+	}
 
+	public void bubbleSort() {
+		Node finalSortedNode = null;
 		Node temp1 = head;
 		Node temp2 = head;
 		int store = 0;
-		while (temp2 != null && temp2.next != null) {
-			temp2 = temp1.next;
-			if (temp1.data > temp2.data) {
+		while (finalSortedNode != head) {
+			// compare till the last sorted Element, decrease the node position
+			// by 1 everytime itteration is complete
+			if (temp2 != null && temp2.next != finalSortedNode) {
+				temp2 = temp1.next;
+				if (temp1.data > temp2.data) {
+					store = temp2.data;
+					temp2.data = temp1.data;
+					temp1.data = store;
+				}
+				temp1 = temp1.next;
+			} else if (temp2.next == finalSortedNode) {
+				finalSortedNode = temp2;
+				temp1 = head;
+				temp2 = head;
+			}
+		}
+	}
+
+	public void selectionSort() {
+		Node temp1 = head;
+		Node temp2 = head;
+		int store = 0;
+		// move second pointer till last element
+		while (temp1 != null && temp2 != null && temp1.next != null) {
+			// second pointer will point to next element before comparision
+			temp2 = temp2.next;
+			if (temp2.data < temp1.data) {
+				// swap
 				store = temp2.data;
 				temp2.data = temp1.data;
 				temp1.data = store;
 			}
-			temp1 = temp1.next;
+			// if second pointer is the last element then start from beginning
+			// by increasing first pointer by 1 and second pointer from pointer
+			// one
+			if (temp2.next == null) {
+				temp1 = temp1.next;
+				temp2 = temp1;
+			}
 		}
+	}
+
+	public void insertionSort(){
+    	 Node current = head;
+    	 Node nextNode = head;
+    	 while(current.next != null){
+    		 nextNode = current.next;
+    		 if(nextNode.data < current.data){
+    			insertInSorted(nextNode, current);
+    		 } else {
+    			 current = current.next;
+    		 }
+    	 }
+    	 printList();
+     }
+	
+	public void insertInSorted(Node nodeToBeInserted, Node current){
+		Node prev = null;
+		while(prev !=current){
+	         if(prev == null){
+	        	 prev = head;
+	         }
+			if(nodeToBeInserted.data <= head.data){
+				// insert at head or in place of prev
+				
+				current.next = nodeToBeInserted.next;
+				nodeToBeInserted.next = head;
+				head = nodeToBeInserted;
+				prev = head;
+				break;
+			} else if(nodeToBeInserted.data > prev.data && nodeToBeInserted.data <= prev.next.data){
+				// insert just after prev and before prev.next
+				current.next = nodeToBeInserted.next;
+				nodeToBeInserted.next = prev.next;
+				prev.next = nodeToBeInserted;
+				break;
+			} else if(nodeToBeInserted.data > prev.data && nodeToBeInserted.data > prev.next.data){
+				//increase prev
+				prev = prev.next;
+			}
+		}
+		
+	}
+
+	public void pairWiseSwap() {
+		Node current = head;
+		Node prev = null;
+		while (current != null && current.next != null) {
+			if (prev == null) {
+				head = current.next;
+				current.next = current.next.next;
+				head.next = current;
+				prev = current;
+				current = current.next;
+			} else {
+				prev.next = current.next;
+				current.next = current.next.next;
+				prev.next.next = current;
+				prev = current;
+				current = current.next;
+			}
+		}
+		printList();
 	}
 
 }
@@ -255,6 +387,12 @@ public class CyclicLinkedListDemo {
 		System.out.println("Press 8: Press 8 to remove Element");
 		System.out.println("Press 9: Press 9 to search Element using Recursion");
 		System.out.println("Press 10: Press 10 for Bubble Sort");
+		System.out.println("Press 11: Press 11 for Selection Sort");
+		System.out.println("Press 12: Press 12 for Insertion Sort");
+		System.out.println("Press 13: Press 13 for Digit form");
+		System.out.println("Press 14: Press 14 for Digit formation using recursion");
+		System.out.println("Press 15: Press 15 to insert in SortedList");
+		System.out.println("Press 16: Press 16 to do Swap Pairwise");
 		while (true) {
 			String str = scanner.next();
 			int position;
@@ -319,12 +457,45 @@ public class CyclicLinkedListDemo {
 
 					break;
 
-					
 				case 10:
 					list.bubbleSort();
 					list.printList();
-					
 
+					break;
+
+				case 11:
+					list.selectionSort();
+					list.printList();
+
+					break;
+
+				case 12:
+				   list.insertionSort();
+
+					break;
+
+				case 13:
+					list.digitForm();
+
+					break;
+
+				case 14:
+					list.digitFormUsingRecursion(list.head);
+
+					break;
+
+				case 15:
+					Random ran = new Random();
+					int number = ran.nextInt(10);
+					list.insertInSortedList(6, list);
+					// list.printList();
+					break;
+
+				case 16:
+					list.pairWiseSwap();
+					break;
+
+				case 17:
 					break;
 				}
 
