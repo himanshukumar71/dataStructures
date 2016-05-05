@@ -1,3 +1,6 @@
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Stack;
@@ -5,6 +8,14 @@ import java.util.Stack;
 class Node {
 	int data;
 	Node next;
+	
+	Node(int value){
+		data = value;
+		next = null;
+	}
+	Node(){
+		
+	}
 }
 
 class LinkedList {
@@ -61,6 +72,7 @@ class LinkedList {
 		if (nodeToBeConnected != null) {
 			temp.next = nodeToBeConnected;
 			nodeToBeConnected = null;
+			System.out.println("Cycle created at "+position);
 			return 1;
 		} else {
 			System.out.println("Invalid poisition");
@@ -435,6 +447,178 @@ class LinkedList {
 	}
 	
 	
+	public void countOccurence(){
+		LinkedHashMap<Integer, Integer> map = new LinkedHashMap<>();
+		Node temp = head;
+		int count;
+		
+		if(head != null){
+		 while(temp != null){
+			 if(map.get(temp.data) == null){
+				 count = 1;
+			 } else {
+				 count = map.get(temp.data) + 1;
+			 }
+			 map.put(temp.data, count);
+			 temp = temp.next;
+		 }
+		}
+		if(temp == null){
+			for(int keyset: map.keySet()){
+				System.out.println("Number of time "+keyset+" is in the list : "+map.get(keyset));
+			}
+		}
+	}
+	
+	public void detectLoop(){
+		Node slowPtr = head, fastPtr = head;
+		while(fastPtr != null && fastPtr.next != null && fastPtr.next.next != null){
+			slowPtr = slowPtr.next;
+			fastPtr = fastPtr.next.next;
+			if(slowPtr == fastPtr){
+				System.out.println("Loop detected");
+				break;
+			}
+		}
+		if(fastPtr == null || fastPtr.next == null || fastPtr.next.next == null){
+		System.out.println("No Loop found in the given list");	
+		}
+	}
+	
+	public int poistionOfLoop(){
+		Node slowPtr = head, fastPtr = head;
+		int count = 0;
+		if(head != null){
+			if(fastPtr != null && fastPtr.next != null && fastPtr.next.next != null){
+		      fastPtr = fastPtr.next.next;
+		      slowPtr = slowPtr.next;
+			}
+			while(slowPtr != fastPtr){
+			     if(fastPtr == null || fastPtr.next == null || fastPtr.next.next == null){
+			    	 System.out.println("No loop");
+			    	 break;
+			     } else {
+			    	 fastPtr = fastPtr.next.next;
+				     slowPtr = slowPtr.next;
+			     }
+			     
+			}
+			if(slowPtr == fastPtr){
+				
+				fastPtr = head;
+				while(slowPtr != fastPtr){
+					count++;
+					slowPtr = slowPtr.next;
+					fastPtr = fastPtr.next;
+				}
+				// once sloptr == fastptr we need to increase the counter as it will not go in the while loop
+				count++;
+			}
+			if(count != 0){
+				System.out.println("Loop detected at position : "+count);
+			}
+		}
+		return count;
+	}
+	
+	public void breakLoop(){
+		int positionOfLoop = poistionOfLoop();
+		int count = 0;
+		Node temp = head;
+		Node loopedNode = null;
+		if(head != null && positionOfLoop != 0){
+			while(temp.next != loopedNode){
+				count++;
+				if(count == positionOfLoop){
+					loopedNode = temp;
+				}
+				temp = temp.next;
+			}
+			temp.next = null;			
+		}
+		System.out.println("No more cyclic list");
+	}
+	
+	public void intersectionPoint(){
+		LinkedList list1 = new LinkedList(); 
+		LinkedList list2 = new LinkedList();
+		list1.head = new Node(1);
+		head.next = new Node(2);
+		head.next.next = new Node(3);
+		
+		list2.head = new Node(10);
+		list2.head.next = new Node(20);
+		list2.head.next.next = new Node(30);
+		list2.head.next.next.next = list1.head;
+		
+		
+		int listSize1 = list1.sizeUsingRecursion(list1.head); 
+		int listSize2 = list2.sizeUsingRecursion(list2.head);
+		int diff = listSize1 - listSize2;
+		Node temp = null;
+		int counter = 0;
+		if(diff > 0){
+			Node temp2 = list2.head;
+			temp = list1.head;
+			while(counter != diff){
+				temp = temp.next;
+				counter++;
+			}
+			while(temp != temp2 || temp != null || temp2 != null){
+				counter++;
+				temp = temp.next;
+				temp2 = temp2.next;
+			}
+		//	if(temp2 != null || temp != null){
+				System.out.println("The intersection point is : "+temp.data+" at position "+counter);
+			//} else {
+			//	System.out.println("No intersection");
+			//}
+			
+		} else {
+			Node temp1 = list1.head;
+			temp = list2.head;
+			while(counter != -diff){
+				System.out.println(temp.data);
+				temp = temp.next;
+				counter++;
+			}
+			counter++;
+			while(temp != temp1){
+				counter++;
+				temp = temp.next;
+				temp1 = temp1.next;
+			}
+			if(temp1 != null || temp != null){
+				System.out.println("The intersection point is : "+temp1.data+" at position "+counter);
+			} else {
+				System.out.println("No intersection");
+			}
+		}
+	}
+	
+	public void removeDuplicates(){
+		bubbleSort();
+		Node freeNode = null;
+		Node temp = head;
+		if(temp != null){
+			while(temp.next != null){
+				if(temp.data == temp.next.data){
+					freeNode = temp.next;
+					temp.next = freeNode.next;
+					freeNode.next = null;
+				} else {
+					temp = temp.next;
+				}
+			}
+		} else {
+			System.out.println("List is empty");
+		}
+	}
+	
+	public void removeDuplicatesWithoutSorting(){
+		
+	}
 
 }
 
@@ -475,6 +659,15 @@ public class CyclicLinkedListDemo {
 		System.out.println("Press 18: Press 18 to store data in array using recursion");
 		System.out.println("Press 19: Press 19 to print middle element");
 		System.out.println("Press 20: Press 20 to print random nth element from last");
+		System.out.println("Press 21: Press 21 to print the total occurance of each character in list");
+		System.out.println("Press 22: Press 22 to detect the loop");
+		System.out.println("Press 23: Press 23 to get the position of the loop");
+		System.out.println("Press 24: Press 24 to break the loop");
+		System.out.println("Press 25: Press 25 to check intersection of another linkedlist starting from 10,20,30, list1");
+		System.out.println("Press 26: Press 26 to remove duplicates from the list");
+		
+		
+		
 		while (true) {
 			String str = scanner.next();
 			int position;
@@ -491,8 +684,7 @@ public class CyclicLinkedListDemo {
 					System.out.println("Enter the position number where end node will attach");
 					str = scanner.next();
 					position = Integer.parseInt(str);
-					System.out.println(list.makeCycle(position));
-					str = scanner.next();
+					list.makeCycle(position);
 					break;
 
 				case 3:
@@ -593,6 +785,35 @@ public class CyclicLinkedListDemo {
 					ran = new Random();
 					number = ran.nextInt(5);
 					list.nthNodeFromLast(number);
+					break;
+					
+				case 21:
+					list.countOccurence();
+					break;
+					
+				case 22:
+					list.detectLoop();
+					break;
+					
+				case 23:
+					list.poistionOfLoop();
+					break;
+					
+				case 24:
+					list.breakLoop();
+					break;
+					
+				case 25:
+					list.intersectionPoint();
+					break;
+					
+				case 26:
+					list.removeDuplicates();
+					System.out.println("The new List is :");
+					list.printList();
+					break;
+					
+				default:
 					break;
 				}
 
