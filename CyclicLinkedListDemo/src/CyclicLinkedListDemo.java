@@ -617,8 +617,27 @@ class LinkedList {
 	}
 	
 	public void removeDuplicatesWithoutSorting(){
+		Node temp = head;
+		Node temp1 = head;
+		Node freeNode = null;
+		if(head != null){
+			while(temp!= null && temp.next != null){
+				temp1 = temp;
+				while(temp1 != null && temp1.next != null){
+					if(temp.data == temp1.next.data){
+						freeNode = temp1.next;
+						temp1.next = freeNode.next;
+					} else {
+						temp1 = temp1.next;
+					}
+				}
+				temp = temp.next;
+			}
+		}
 		
+		printList();
 	}
+	
 
 }
 
@@ -639,6 +658,10 @@ public class CyclicLinkedListDemo {
 			}
 
 		}
+		
+		
+		
+		
 		System.out.println("Press 1: To print List");
 		System.out.println("Press 2: Press 2 to make it Cyclic");
 		System.out.println("Press 3: Press 3 to printReverse List using recursion");
@@ -665,7 +688,7 @@ public class CyclicLinkedListDemo {
 		System.out.println("Press 24: Press 24 to break the loop");
 		System.out.println("Press 25: Press 25 to check intersection of another linkedlist starting from 10,20,30, list1");
 		System.out.println("Press 26: Press 26 to remove duplicates from the list");
-		
+		System.out.println("Press 27: Press 27 to remove duplicates without sorting");
 		
 		
 		while (true) {
@@ -811,6 +834,10 @@ public class CyclicLinkedListDemo {
 					list.removeDuplicates();
 					System.out.println("The new List is :");
 					list.printList();
+					break;
+					
+				case 27:
+					list.removeDuplicatesWithoutSorting();
 					break;
 					
 				default:
