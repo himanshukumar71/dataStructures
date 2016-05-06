@@ -1,8 +1,12 @@
+import java.awt.List;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.Stack;
 
 class Node {
@@ -638,7 +642,103 @@ class LinkedList {
 		printList();
 	}
 	
-
+	public void removeDuplicatesUsingHashSet(){
+		Node temp = head;
+		Node freeNode = null;
+		HashSet<Integer> set = new HashSet<>();
+		if(head != null){
+			set.add(head.data);
+			while(temp.next != null){
+				if(set.contains(temp.next.data)){
+					// remove temp.next
+					freeNode = temp.next;
+					temp.next = freeNode.next;
+					freeNode.next = null;
+				} else {
+					set.add(temp.next.data);
+					temp = temp.next;
+				}
+			}
+		}
+		System.out.println("new List after removing duplicates ");
+		printList();
+	}
+	public void rotateList(int n){
+		// rotate from last from nth node
+		Node temp1 = head;
+		Node temp2 = head;
+		int count = 0;
+		if(head != null){
+			while(count != n && temp2.next != null){
+				count++;
+				temp2 = temp2.next;
+			}
+			if(temp2 == null){
+				// need to check
+				System.out.println("Invalid expectation");
+				return;
+			}
+			while(temp2.next != null){
+				temp1 = temp1.next;
+				temp2 = temp2.next;
+			}
+			
+			temp2.next = head;
+			head = temp1.next;
+			temp1.next = null;
+		} else {
+			System.out.println("List is empty");
+		}
+		printList();
+	}
+	
+	public void createTwoListsFindInteresection(){
+		LinkedList list1 = new LinkedList();
+		LinkedList list2 = new LinkedList();
+		list1.insertAtLast(1);
+		list1.insertAtLast(2);
+		list1.insertAtLast(3);
+		list1.insertAtLast(4);
+		list2.insertAtLast(2);
+		list2.insertAtLast(4);
+		System.out.print("List 1 : ");
+		list1.printList();
+		System.out.print("\nList 2 : ");
+		list2.printList();
+		LinkedList list3 = new LinkedList();
+		findInteresectionList(list1.head, list2.head, list3);
+		System.out.print("\nInteresection List 3: ");
+		list3.printList();
+		
+	}
+	
+	public void findInteresectionList(Node current1, Node current2, LinkedList list3){
+		if(current1 == null || current2 == null){
+			return;
+		} else {
+			if(current1.data < current2.data){
+				findInteresectionList(current1.next, current2, list3);
+			} else if( current1.data > current2.data){
+				findInteresectionList(current1, current2.next, list3);
+			} else if(current1.data == current2.data){
+				list3.insertAtLast(current1.data); 
+				findInteresectionList(current1.next, current2.next, list3);
+			}
+		}
+	}
+	
+	
+	public void deleteAlternateNodeByRecursion(Node current){
+		if(current ==  null || current.next == null){
+			return;
+		} else {
+			Node freeNode = new Node();
+			freeNode = current.next;
+			current.next = freeNode.next;
+			freeNode.next = null;
+			deleteAlternateNodeByRecursion(current.next);
+		}
+	}
 }
 
 public class CyclicLinkedListDemo {
@@ -689,6 +789,10 @@ public class CyclicLinkedListDemo {
 		System.out.println("Press 25: Press 25 to check intersection of another linkedlist starting from 10,20,30, list1");
 		System.out.println("Press 26: Press 26 to remove duplicates from the list");
 		System.out.println("Press 27: Press 27 to remove duplicates without sorting");
+		System.out.println("Press 28: Press 28 to remove duplicates using HashSet");
+		System.out.println("Press 29: Press 29 to rotate the list");
+		System.out.println("Press 30: Press 30 to find interesection of two lists");
+		System.out.println("Press 31: Press 31 to delete alternate Node");
 		
 		
 		while (true) {
@@ -838,6 +942,30 @@ public class CyclicLinkedListDemo {
 					
 				case 27:
 					list.removeDuplicatesWithoutSorting();
+					break;
+					
+					
+				case 28:
+					list.removeDuplicatesUsingHashSet();
+					break;
+					
+				case 29:
+					ran = new Random();
+					//int rotatedBy = ran.nextInt(3);
+					System.out.println("Rotated by "+2);
+					list.rotateList(2);
+					break;
+					
+				case 30:
+					list.createTwoListsFindInteresection();
+					break;
+					
+				case 31:
+					System.out.println("\nOriginal list");
+					list.printList();
+					list.deleteAlternateNodeByRecursion(list.head);
+					System.out.println("\nNew List");
+					list.printList();
 					break;
 					
 				default:
